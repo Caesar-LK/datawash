@@ -50,26 +50,48 @@ class DataCleaner:
         # 1. 统一编码
         text = self.standardize_encoding(text)
         
-        # 2. 删除系统标记
-        text = re.sub(r'\[.*?\]', '', text)
-        text = re.sub(r'【.*?】', '', text)
+        # 2. 删除系统标记和特殊字符
+        text = re.sub(r'\[.*?\]', '', text)  # 删除方括号内容
+        text = re.sub(r'【.*?】', '', text)  # 删除中文方括号内容
+        text = re.sub(r'<.*?>', '', text)   # 删除HTML标签
+        text = re.sub(r'[^\w\s\u4e00-\u9fff，。！？、：；""''（）【】《》]', '', text)  # 只保留中文、英文、数字和基本标点
         
-        # 3. 缩减重复字符
-        text = re.sub(r'(.)\1{2,}', r'\1\1', text)
+        # 3. 删除重复字符和多余空格
+        text = re.sub(r'(.)\1{2,}', r'\1\1', text)  # 缩减重复字符
+        text = re.sub(r'\s+', ' ', text)  # 合并多个空格
         
-        # 4. 替换同义词
+        # 4. 替换同义词和标准化用语
         for old, new in self.synonym_dict.items():
             text = text.replace(old, new)
         
         # 5. 脱敏处理
         text = re.sub(r'(1[3-9]\d{9})', '*******\g<1>[-4:]', text)  # 手机号
         text = re.sub(r'(\d{17}[\dXx])', 'ID_\g<1>[-4:]', text)  # 身份证号
+        text = re.sub(r'(\d{16})', 'CARD_\g<1>[-4:]', text)  # 银行卡号
+        text = re.sub(r'([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})', 'EMAIL', text)  # 邮箱
         
         # 6. 删除无效内容
         for keyword in self.invalid_keywords:
             text = text.replace(keyword, '')
+            
+        # 7. 删除过短的句子和无意义内容
+        text = re.sub(r'^[\s\.,，。!！?？]+$', '', text)  # 删除只有标点的句子
+        text = re.sub(r'^[a-zA-Z0-9\s]+$', '', text)  # 删除纯英文数字的句子
         
-        return text.strip()
+        # 8. 标准化标点符号
+        text = text.replace('，', ',')
+        text = text.replace('。', '.')
+        text = text.replace('！', '!')
+        text = text.replace('？', '?')
+        text = text.replace('：', ':')
+        text = text.replace('；', ';')
+        
+        # 9. 删除多余的空格和换行
+        text = re.sub(r'\n+', ' ', text)  # 将换行替换为空格
+        text = re.sub(r'\s+', ' ', text)  # 合并多个空格
+        text = text.strip()  # 删除首尾空格
+        
+        return text
 
     def is_valid_message(self, text: str) -> bool:
         """判断消息是否有效"""
@@ -86,6 +108,22 @@ class DataCleaner:
             
         # 3. 检查是否包含敏感词
         if any(word in text for word in self.forbidden_words):
+            return False
+            
+        # 4. 检查是否只包含标点符号
+        if re.match(r'^[\s\.,，。!！?？]+$', text):
+            return False
+            
+        # 5. 检查是否只包含英文数字
+        if re.match(r'^[a-zA-Z0-9\s]+$', text):
+            return False
+            
+        # 6. 检查是否包含系统消息特征
+        if re.search(r'系统|提示|通知|公告|消息|提醒', text):
+            return False
+            
+        # 7. 检查是否包含自动回复特征
+        if re.search(r'您好|感谢|谢谢|再见|欢迎|客服', text) and len(text) < 10:
             return False
             
         return True
