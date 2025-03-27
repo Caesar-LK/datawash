@@ -22,19 +22,85 @@ class DataCleaner:
         
         # 初始化测试关键词
         self.test_keywords = [
-            "test", "测试", "测试数据", "测试用例", "测试环境"
+            "test", "测试", "测试数据", "测试用例", "测试环境",
+            "测试账号", "测试用户", "测试系统", "测试功能"
         ]
         
         # 初始化无效内容关键词
         self.invalid_keywords = [
-            "[图片]", "[表情]", "[语音]", "[视频]", "[文件]"
+            "[图片]", "[表情]", "[语音]", "[视频]", "[文件]",
+            "[链接]", "[红包]", "[转账]", "[名片]", "[小程序]",
+            "[公众号]", "[二维码]", "[位置]", "[收藏]", "[引用]",
+            "[系统消息]", "[通知]", "[提醒]", "[广告]", "[推广]"
         ]
+        
+        # 初始化系统消息关键词
+        self.system_keywords = [
+            "系统", "通知", "提醒", "消息", "公告", "提示",
+            "已读", "未读", "正在输入", "对方已撤回", "消息已撤回",
+            "消息已删除", "消息已过期", "消息已失效", "消息已屏蔽"
+        ]
+        
+        # 初始化广告关键词
+        self.ad_keywords = [
+            "广告", "推广", "营销", "优惠", "促销", "折扣",
+            "特价", "限时", "秒杀", "抢购", "活动", "抽奖",
+            "关注", "订阅", "公众号", "小程序", "二维码"
+        ]
+        
+        # 初始化无意义内容关键词
+        self.meaningless_keywords = [
+            "嗯", "哦", "啊", "呀", "呢", "吧", "吗", "？",
+            "。。。", "。。", "。。。", "。。", "。。。", "。。",
+            "。。。", "。。", "。。。", "。。", "。。。", "。。"
+        ]
+        
+        # 初始化表情符号
+        self.emoji_pattern = re.compile("["
+            u"\U0001F600-\U0001F64F"  # emoticons
+            u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+            u"\U0001F680-\U0001F6FF"  # transport & map symbols
+            u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+            u"\U00002702-\U000027B0"
+            u"\U000024C2-\U0001F251"
+            "]+", flags=re.UNICODE)
 
     def standardize_encoding(self, text: str) -> str:
         """统一编码格式"""
         if not isinstance(text, str):
             return str(text)
-        return unicodedata.normalize('NFKC', text)
+            
+        try:
+            # 尝试解码为utf-8
+            if isinstance(text, bytes):
+                text = text.decode('utf-8')
+            else:
+                # 确保文本是unicode
+                text = str(text)
+                
+            # 统一Unicode格式
+            text = unicodedata.normalize('NFKC', text)
+            
+            # 处理特殊字符
+            text = text.replace('\u200b', '')  # 零宽空格
+            text = text.replace('\u200c', '')  # 零宽非连接符
+            text = text.replace('\u200d', '')  # 零宽连接符
+            text = text.replace('\u200e', '')  # 左至右标记
+            text = text.replace('\u200f', '')  # 右至左标记
+            
+            return text
+        except UnicodeDecodeError:
+            # 如果utf-8解码失败，尝试其他编码
+            encodings = ['gbk', 'gb2312', 'gb18030', 'big5']
+            for encoding in encodings:
+                try:
+                    if isinstance(text, bytes):
+                        return text.decode(encoding)
+                    return text
+                except UnicodeDecodeError:
+                    continue
+            # 如果所有编码都失败，返回原始文本
+            return str(text)
 
     def standardize_datetime(self, dt: datetime) -> datetime:
         """标准化日期时间格式"""
@@ -54,20 +120,39 @@ class DataCleaner:
         text = re.sub(r'\[.*?\]', '', text)
         text = re.sub(r'【.*?】', '', text)
         
-        # 3. 缩减重复字符
+        # 3. 删除表情符号
+        text = self.emoji_pattern.sub(r'', text)
+        
+        # 4. 删除URL链接
+        text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', text)
+        
+        # 5. 删除电话号码
+        text = re.sub(r'(?:\+?86)?1[3-9]\d{9}', '', text)
+        
+        # 6. 删除邮箱地址
+        text = re.sub(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', '', text)
+        
+        # 7. 缩减重复字符
         text = re.sub(r'(.)\1{2,}', r'\1\1', text)
         
-        # 4. 替换同义词
+        # 8. 替换同义词
         for old, new in self.synonym_dict.items():
             text = text.replace(old, new)
         
-        # 5. 脱敏处理
+        # 9. 脱敏处理
         text = re.sub(r'(1[3-9]\d{9})', '*******\g<1>[-4:]', text)  # 手机号
         text = re.sub(r'(\d{17}[\dXx])', 'ID_\g<1>[-4:]', text)  # 身份证号
         
-        # 6. 删除无效内容
+        # 10. 删除无效内容
         for keyword in self.invalid_keywords:
             text = text.replace(keyword, '')
+            
+        # 11. 删除无意义内容
+        for keyword in self.meaningless_keywords:
+            text = text.replace(keyword, '')
+        
+        # 12. 删除多余空格
+        text = re.sub(r'\s+', ' ', text)
         
         return text.strip()
 
@@ -86,6 +171,34 @@ class DataCleaner:
             
         # 3. 检查是否包含敏感词
         if any(word in text for word in self.forbidden_words):
+            return False
+            
+        # 4. 检查是否包含系统消息关键词
+        if any(keyword in text for keyword in self.system_keywords):
+            return False
+            
+        # 5. 检查是否包含广告关键词
+        if any(keyword in text for keyword in self.ad_keywords):
+            return False
+            
+        # 6. 检查是否只包含表情符号
+        if self.emoji_pattern.match(text):
+            return False
+            
+        # 7. 检查是否只包含URL
+        if re.match(r'^https?://\S+$', text):
+            return False
+            
+        # 8. 检查是否只包含数字
+        if text.strip().isdigit():
+            return False
+            
+        # 9. 检查是否只包含标点符号
+        if re.match(r'^[^\w\s]+$', text):
+            return False
+            
+        # 10. 检查是否包含过多重复字符
+        if re.search(r'(.)\1{4,}', text):
             return False
             
         return True
@@ -127,7 +240,7 @@ class DataCleaner:
             
         if re.search(r'紧急|急|快|立即|马上|尽快|加急|加急处理', text):
             tags.append('紧急问题')
-            
+        
         # 去重
         return list(set(tags))
 
