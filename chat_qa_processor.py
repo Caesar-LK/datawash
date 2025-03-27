@@ -14,93 +14,81 @@ class ChatQAProcessor:
         self.cleaner = DataCleaner()
         self.analyzer = DataAnalyzer()
         
-    def process_chat_records(self, file_path: str) -> Dict:
-        """处理聊天记录"""
+    def process_chat_records(self, excel_path: str, output_dir: str = 'output') -> Dict:
+        """处理聊天记录并生成分析报告"""
+        # 创建输出目录
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # 读取Excel文件
+        print("正在读取Excel文件...")
         try:
-            # 读取Excel文件，确保使用正确的编码
-            df = pd.read_excel(file_path, engine='openpyxl')
-            
-            # 检查必要的列是否存在
-            required_columns = ['时间', '发送者', '接收者', '消息内容']
-            missing_columns = [col for col in required_columns if col not in df.columns]
-            if missing_columns:
-                raise ValueError(f"Excel文件缺少必要的列: {', '.join(missing_columns)}")
-            
-            print(f"成功读取Excel文件，共{len(df)}条记录")
+            df = pd.read_excel(excel_path)
+            print(f"成功读取Excel文件，共 {len(df)} 行数据")
             print("列名:", df.columns.tolist())
             
-            # 确保时间列是datetime类型
-            df['时间'] = pd.to_datetime(df['时间'])
+            # 将时间列转换为日期时间类型
+            time_columns = ['消息时间', '会话创建时间', '会话接入时间', '会话最后一条消息时间', '会话结束时间', 
+                          '座席领取时间', '座席的初次响应时间']
+            for col in time_columns:
+                if col in df.columns:
+                    df[col] = pd.to_datetime(df[col], errors='coerce')
             
-            # 按时间排序
-            df = df.sort_values('时间')
-            
-            # 初始化结果字典
-            results = {
-                'qa_pairs': [],
-                'diagnostics': {
-                    'total_messages': len(df),
-                    'valid_messages': 0,
-                    'invalid_messages': 0,
-                    'qa_pairs_count': 0,
-                    'missing_rates': {},
-                    'emoji_frequency': 0,
-                    'language_mix_ratio': 0,
-                    'message_length_stats': {},
-                    'session_patterns': {},
-                    'quality_metrics': {}
-                }
-            }
-            
-            # 处理消息
-            current_session = []
-            last_time = None
-            
-            for _, row in df.iterrows():
-                # 确保消息内容是字符串类型
-                message = str(row['消息内容']).strip()
-                if not message:
-                    continue
-                    
-                # 清理消息
-                cleaned_message = self.cleaner.clean_text(message)
-                
-                # 检查消息有效性
-                if self.cleaner.is_valid_message(cleaned_message):
-                    current_session.append({
-                        'time': row['时间'],
-                        'sender': str(row['发送者']).strip(),
-                        'receiver': str(row['接收者']).strip(),
-                        'content': cleaned_message
-                    })
-                    results['diagnostics']['valid_messages'] += 1
-                else:
-                    results['diagnostics']['invalid_messages'] += 1
-                
-                # 检查是否为新会话
-                if last_time and self.cleaner.is_new_session(row['时间'], last_time):
-                    # 处理当前会话
-                    qa_pairs = self._process_qa_pairs(current_session)
-                    results['qa_pairs'].extend(qa_pairs)
-                    results['diagnostics']['qa_pairs_count'] += len(qa_pairs)
-                    current_session = []
-                
-                last_time = row['时间']
-            
-            # 处理最后一个会话
-            if current_session:
-                qa_pairs = self._process_qa_pairs(current_session)
-                results['qa_pairs'].extend(qa_pairs)
-                results['diagnostics']['qa_pairs_count'] += len(qa_pairs)
-            
-            # 生成诊断报告
-            self._generate_diagnostic_report(df, results['diagnostics'])
-            
-            return results
-            
+            print("时间列转换完成")
         except Exception as e:
-            print(f"处理聊天记录时出错: {str(e)}")
+            print(f"读取Excel文件失败: {str(e)}")
             raise
+        
+        # 确保必要的列存在
+        required_columns = ['消息来源', '聊天内容', '消息时间']
+        if not all(col in df.columns for col in required_columns):
+            missing_columns = [col for col in required_columns if col not in df.columns]
+            raise ValueError(f"Excel文件缺少必要的列：{', '.join(missing_columns)}")
+        
+        # 检查数据是否为空
+        if len(df) == 0:
+            raise ValueError("Excel文件中没有数据")
+        
+        # 数据诊断
+        print("正在进行数据诊断...")
+        try:
+            diagnostic_report = self.analyzer.generate_quality_report(df)
+        except Exception as e:
+            print(f"数据诊断失败: {str(e)}")
+            raise
+        
+        # 数据清洗
+        print("正在进行数据清洗...")
+        try:
+            df = self._clean_data(df)
+            print(f"清洗后剩余 {len(df)} 行数据")
+        except Exception as e:
+            print(f"数据清洗失败: {str(e)}")
+            raise
+        
+        # 处理问答对
+        print("正在处理问答对...")
+        try:
+            qa_pairs = self._process_qa_pairs(df)
+            print(f"提取出 {len(qa_pairs)} 个问答对")
+        except Exception as e:
+            print(f"问答对处理失败: {str(e)}")
+            raise
+        
+        # 转换为DataFrame
+        qa_df = pd.DataFrame(qa_pairs)
+        
+        # 保存结果
+        print("正在保存结果...")
+        try:
+            self._save_results(qa_df, diagnostic_report, output_dir)
+        except Exception as e:
+            print(f"保存结果失败: {str(e)}")
+            raise
+        
+        return {
+            'qa_pairs': qa_df,
+            'diagnostic_report': diagnostic_report
+        }
     
     def _clean_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """清洗数据"""
@@ -131,9 +119,9 @@ class ChatQAProcessor:
             if idx % 100 == 0:
                 print(f"处理进度: {idx}/{total_rows}")
                 
-            message_source = str(row['发送者']).strip()
-            message_content = str(row['内容']).strip()
-            message_time = row['时间']
+            message_source = str(row['消息来源']).strip()
+            message_content = str(row['聊天内容']).strip()
+            message_time = row['消息时间']
             
             # 检查是否需要开始新的会话
             if last_message_time is not None:
