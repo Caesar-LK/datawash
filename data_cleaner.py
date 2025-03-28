@@ -49,6 +49,8 @@ class DataCleaner:
             "[图片]", "[表情]", "[语音]", "[视频]", "[文件]",
             "[链接]", "[红包]", "[转账]", "[位置]", "[名片]",
             "[小程序]", "[公众号]", "[群聊]", "[私聊]", "[系统]",
+            "[正在输入]", "[已读]", "[已送达]", "[已发送]",
+            "[撤回]", "[删除]", "[清空]", "[置顶]", "[免打扰]",
             
             # 自动回复和模板消息
             "您好，很高兴为您服务",
@@ -61,6 +63,16 @@ class DataCleaner:
             "正在为您处理",
             "正在为您办理",
             "正在为您审核",
+            "正在为您转接相关部门",
+            "正在为您联系相关工作人员",
+            "正在为您协调处理",
+            "正在为您跟进",
+            "正在为您反馈",
+            "正在为您升级处理",
+            "正在为您加急处理",
+            "正在为您优先处理",
+            "正在为您安排专员处理",
+            "正在为您安排技术人员处理",
             
             # 常见无效内容
             "收到", "好的", "嗯", "哦", "啊", "呀", "呢", "吧",
@@ -89,6 +101,17 @@ class DataCleaner:
             "正在下载", "下载完成", "下载失败",
             "正在上传", "上传完成", "上传失败",
             
+            # 客服协作相关
+            "需要转接", "需要升级", "需要反馈",
+            "需要核实", "需要确认", "需要验证",
+            "需要审核", "需要审批", "需要处理",
+            "需要跟进", "需要协调", "需要沟通",
+            "需要联系", "需要对接", "需要交接",
+            "需要转交", "需要移交", "需要转介",
+            "需要转派", "需要转办", "需要转达",
+            "需要转告", "需要转述", "需要转报",
+            "需要转呈", "需要转递", "需要转送",
+            
             # 其他无效内容
             "点击查看", "查看更多", "查看详情",
             "复制成功", "复制失败", "复制链接",
@@ -101,7 +124,29 @@ class DataCleaner:
             "置顶成功", "置顶失败", "取消置顶",
             "免打扰", "消息免打扰", "群聊免打扰",
             "已静音", "已屏蔽", "已拉黑", "已举报",
-            "已关注", "已取消关注", "已点赞", "已收藏"
+            "已关注", "已取消关注", "已点赞", "已收藏",
+            
+            # 新增的自动回复和系统消息
+            "正在为您查询相关信息",
+            "正在为您核实具体情况",
+            "正在为您联系相关部门",
+            "正在为您协调处理方案",
+            "正在为您安排专人处理",
+            "正在为您升级处理级别",
+            "正在为您加急处理问题",
+            "正在为您优先处理请求",
+            "正在为您安排专员跟进",
+            "正在为您安排技术人员处理",
+            "正在为您转接相关部门处理",
+            "正在为您联系相关工作人员处理",
+            "正在为您协调相关部门处理",
+            "正在为您跟进处理进度",
+            "正在为您反馈处理结果",
+            "正在为您升级处理级别",
+            "正在为您加急处理问题",
+            "正在为您优先处理请求",
+            "正在为您安排专员跟进",
+            "正在为您安排技术人员处理"
         ]
 
         # 添加关键词权重
@@ -160,59 +205,129 @@ class DataCleaner:
     def clean_text(self, text: str) -> str:
         """清理文本内容"""
         if not isinstance(text, str):
-            return str(text)
-        
-        # 1. 统一编码
-        text = self.standardize_encoding(text)
-        
-        # 2. 删除系统标记和特殊字符
-        text = re.sub(r'\[.*?\]', '', text)  # 删除方括号内容
-        text = re.sub(r'【.*?】', '', text)  # 删除中文方括号内容
-        text = re.sub(r'<.*?>', '', text)   # 删除HTML标签
-        
-        # 3. 删除链接
-        text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', text)  # 删除http链接
-        text = re.sub(r'www\.(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', text)  # 删除www链接
-        text = re.sub(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', '', text)  # 删除邮箱链接
-        text = re.sub(r'[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}', '', text)  # 删除域名
-        text = re.sub(r'[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.(?:com|cn|net|org|edu|gov|mil|biz|info|name|mobi|asia|app|dev|io|co|me|tv|cc|xyz|top|site|online|tech|store|blog|shop|club|fun|game|live|news|video|music|photo|cloud|host|link|network|services|solutions|agency|studio|design|digital|media|marketing|agency|consulting|group|inc|ltd|llc|corp|company|business|enterprise|solutions|services|agency|studio|design|digital|media|marketing|agency|consulting|group|inc|ltd|llc|corp|company|business|enterprise)', '', text)  # 删除常见域名后缀
-        
-        # 4. 只保留中文、英文、数字和基本标点
-        text = re.sub(r'[^\w\s\u4e00-\u9fff，。！？、：；""''（）【】《》]', '', text)
-        
-        # 5. 删除重复字符和多余空格
-        text = re.sub(r'(.)\1{2,}', r'\1\1', text)  # 缩减重复字符
-        text = re.sub(r'\s+', ' ', text)  # 合并多个空格
-        
-        # 6. 替换同义词和标准化用语
-        for old, new in self.synonym_dict.items():
-            text = text.replace(old, new)
-        
-        # 7. 脱敏处理
-        text = re.sub(r'(1[3-9]\d{9})', '*******\g<1>[-4:]', text)  # 手机号
-        text = re.sub(r'(\d{17}[\dXx])', 'ID_\g<1>[-4:]', text)  # 身份证号
-        text = re.sub(r'(\d{16})', 'CARD_\g<1>[-4:]', text)  # 银行卡号
-        
-        # 8. 删除无效内容
-        for keyword in self.invalid_keywords:
-            text = text.replace(keyword, '')
+            return ""
             
-        # 9. 删除过短的句子和无意义内容
-        text = re.sub(r'^[\s\.,，。!！?？]+$', '', text)  # 删除只有标点的句子
-        text = re.sub(r'^[a-zA-Z0-9\s]+$', '', text)  # 删除纯英文数字的句子
+        # 标准化文本编码
+        text = text.encode('utf-8', errors='ignore').decode('utf-8')
         
-        # 10. 标准化标点符号
-        text = text.replace('，', ',')
-        text = text.replace('。', '.')
-        text = text.replace('！', '!')
-        text = text.replace('？', '?')
-        text = text.replace('：', ':')
-        text = text.replace('；', ';')
+        # 移除系统标签和特殊字符
+        text = re.sub(r'\[.*?\]', '', text)  # 移除方括号及其内容
+        text = re.sub(r'<.*?>', '', text)    # 移除HTML标签
+        text = re.sub(r'[^\u4e00-\u9fa5a-zA-Z0-9，。！？、：；""''（）【】《》\s]', '', text)  # 只保留中文、英文、数字和基本标点
         
-        # 11. 删除多余的空格和换行
-        text = re.sub(r'\n+', ' ', text)  # 将换行替换为空格
-        text = re.sub(r'\s+', ' ', text)  # 合并多个空格
-        text = text.strip()  # 删除首尾空格
+        # 移除重复字符
+        text = re.sub(r'(.)\1{2,}', r'\1\1', text)
+        
+        # 敏感信息脱敏处理
+        # 1. 身份证号脱敏（保留前6位和后4位）
+        text = re.sub(r'[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3}[\dXx]', 
+                     lambda m: m.group()[:6] + '*' * 8 + m.group()[-4:], text)
+        
+        # 2. 手机号脱敏（保留前3位和后4位）
+        text = re.sub(r'1[3-9]\d{9}', lambda m: m.group()[:3] + '*' * 4 + m.group()[-4:], text)
+        
+        # 3. 座机号码脱敏
+        text = re.sub(r'(?:\d{3,4}-?)?\d{7,8}', lambda m: '*' * len(m.group()), text)
+        
+        # 4. 邮箱地址脱敏
+        text = re.sub(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', 
+                     lambda m: m.group().split('@')[0][:2] + '*' * (len(m.group().split('@')[0])-2) + '@' + m.group().split('@')[1], text)
+        
+        # 5. 银行卡号脱敏（保留前6位和后4位）
+        text = re.sub(r'\d{16,19}', lambda m: m.group()[:6] + '*' * (len(m.group())-10) + m.group()[-4:], text)
+        
+        # 6. 中文姓名脱敏（保留姓氏）
+        text = re.sub(r'[\u4e00-\u9fa5]{2,4}(?=先生|女士|小姐|老师|经理|主任|医生|护士|警官|同志)', 
+                     lambda m: m.group()[0] + '*' * (len(m.group())-1), text)
+        
+        # 7. 地址脱敏（保留省份和城市）
+        text = re.sub(r'[\u4e00-\u9fa5]{2,}省[\u4e00-\u9fa5]{2,}市[\u4e00-\u9fa5]{2,}区?[\u4e00-\u9fa5]{2,}号?[\u4e00-\u9fa5]{2,}室?', 
+                     lambda m: m.group().split('市')[0] + '市' + '*' * (len(m.group().split('市')[1])), text)
+        
+        # 8. 车牌号脱敏（保留省份简称和最后两位）
+        text = re.sub(r'[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-Z0-9]{4,5}[A-Z0-9挂学警港澳]', 
+                     lambda m: m.group()[:2] + '*' * (len(m.group())-4) + m.group()[-2:], text)
+        
+        # 9. 微信号脱敏
+        text = re.sub(r'微信号[：:]\s*[a-zA-Z0-9_-]{6,20}', '微信号：******', text)
+        
+        # 10. QQ号脱敏
+        text = re.sub(r'QQ[号：:]\s*[1-9][0-9]{4,}', 'QQ号：******', text)
+        
+        # 11. 网址脱敏
+        text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', 
+                     lambda m: 'http://******', text)
+        
+        # 12. 日期时间脱敏（保留年月）
+        text = re.sub(r'\d{4}[-/年]\d{1,2}[-/月]\d{1,2}[日]?', lambda m: m.group().split('月')[0] + '月**日', text)
+        
+        # 移除无效内容
+        # 1. 移除纯标点符号
+        text = re.sub(r'^[\s\.,，。!！?？]+$', '', text)
+        
+        # 2. 移除纯英文数字
+        text = re.sub(r'^[a-zA-Z0-9\s]+$', '', text)
+        
+        # 3. 移除系统消息和自动回复（使用模式匹配）
+        # 3.1 移除以"正在"开头的处理状态消息
+        text = re.sub(r'^正在(?:为您)?(?:处理|查询|核实|办理|审核|转接|联系|协调|跟进|反馈|升级|加急|优先|安排|转派|转办|转达|转告|转述|转报|转呈|转递|转送).*$', '', text)
+        
+        # 3.2 移除以"请稍"开头的等待提示
+        text = re.sub(r'^请稍(?:等|候|后|待).*$', '', text)
+        
+        # 3.3 移除以"感谢"开头的感谢语
+        text = re.sub(r'^感谢(?:您的)?(?:咨询|支持|理解|配合|耐心等待).*$', '', text)
+        
+        # 3.4 移除以"您好"开头的问候语
+        text = re.sub(r'^您好(?:，|,)?(?:很高兴|非常高兴)?(?:为您服务|为您提供帮助).*$', '', text)
+        
+        # 3.5 移除以"需要"开头的协作提示
+        text = re.sub(r'^需要(?:转接|升级|反馈|核实|确认|验证|审核|审批|处理|跟进|协调|沟通|联系|对接|交接|转交|移交|转介|转派|转办|转达|转告|转述|转报|转呈|转递|转送).*$', '', text)
+        
+        # 3.6 移除以"正在为您"开头的处理提示
+        text = re.sub(r'^正在为您(?:处理|查询|核实|办理|审核|转接|联系|协调|跟进|反馈|升级|加急|优先|安排|转派|转办|转达|转告|转述|转报|转呈|转递|转送).*$', '', text)
+        
+        # 3.7 移除以"系统"开头的系统提示
+        text = re.sub(r'^系统(?:正在|正在为您)?(?:处理|查询|核实|办理|审核|转接|联系|协调|跟进|反馈|升级|加急|优先|安排|转派|转办|转达|转告|转述|转报|转呈|转递|转送).*$', '', text)
+        
+        # 3.8 移除以"正在"开头的状态提示
+        text = re.sub(r'^正在(?:加载|同步|下载|上传|连接|处理|查询|核实|办理|审核|转接|联系|协调|跟进|反馈|升级|加急|优先|安排|转派|转办|转达|转告|转述|转报|转呈|转递|转送).*$', '', text)
+        
+        # 3.9 移除以"已"开头的状态提示
+        text = re.sub(r'^已(?:读|送达|发送|处理|完成|成功|失败|取消|删除|清空|置顶|静音|屏蔽|拉黑|举报|关注|取消关注|点赞|收藏).*$', '', text)
+        
+        # 3.10 移除以"正在为您"开头的处理提示（带时间）
+        text = re.sub(r'^正在为您(?:处理|查询|核实|办理|审核|转接|联系|协调|跟进|反馈|升级|加急|优先|安排|转派|转办|转达|转告|转述|转报|转呈|转递|转送).*?，请稍候.*$', '', text)
+        
+        # 4. 移除其他无效内容
+        # 4.1 移除纯表情符号
+        text = re.sub(r'^[\U0001F300-\U0001F9FF\s]+$', '', text)
+        
+        # 4.2 移除纯数字和标点
+        text = re.sub(r'^[\d\s\.,，。!！?？]+$', '', text)
+        
+        # 4.3 移除纯英文和标点
+        text = re.sub(r'^[a-zA-Z\s\.,，。!！?？]+$', '', text)
+        
+        # 4.4 移除纯中文标点
+        text = re.sub(r'^[\s，。！？、：；""''（）【】《》]+$', '', text)
+        
+        # 4.5 移除纯空格和换行
+        text = re.sub(r'^[\s\n]+$', '', text)
+        
+        # 4.6 移除重复的标点符号
+        text = re.sub(r'([，。！？、：；""''（）【】《》])\1+', r'\1', text)
+        
+        # 4.7 移除多余的空格
+        text = re.sub(r'\s+', ' ', text)
+        
+        # 标准化标点符号
+        text = text.replace('，', ',').replace('。', '.').replace('！', '!').replace('？', '?')
+        text = text.replace('：', ':').replace('；', ';').replace('（', '(').replace('）', ')')
+        text = text.replace('【', '[').replace('】', ']').replace('《', '<').replace('》', '>')
+        
+        # 清理多余空格
+        text = re.sub(r'\s+', ' ', text).strip()
         
         return text
 
@@ -338,69 +453,42 @@ class DataCleaner:
         return 0.6 * jaccard + 0.4 * keyword_similarity
 
     def calculate_context_match(self, question: str, answer: str) -> float:
-        """计算问题和回答的语境匹配度"""
-        if not question or not answer:
-            return 0.0
-            
-        # 1. 获取问题和回答的标签
+        """计算问题和回答的上下文匹配度"""
+        # 获取问题和回答的标签
         question_tags = self.extract_tags(question)
         answer_tags = self.extract_tags(answer)
         
-        # 2. 计算标签匹配度
-        tag_match_score = 0.0
-        if question_tags and answer_tags:
-            matching_tags = set(question_tags) & set(answer_tags)
-            if matching_tags:
-                # 计算加权标签匹配度
-                total_weight = 0
-                matched_weight = 0
-                
-                for tag in question_tags:
-                    total_weight += self.keyword_weights.get(tag, 1.0)
-                    if tag in matching_tags:
-                        matched_weight += self.keyword_weights.get(tag, 1.0)
-                        
-                for tag in answer_tags:
-                    total_weight += self.keyword_weights.get(tag, 1.0)
-                    if tag in matching_tags:
-                        matched_weight += self.keyword_weights.get(tag, 1.0)
-                        
-                tag_match_score = matched_weight / total_weight if total_weight > 0 else 0.0
+        # 计算标签匹配度
+        matching_tags = set(question_tags) & set(answer_tags)
+        tag_match_score = len(matching_tags) / max(len(question_tags), len(answer_tags)) if question_tags or answer_tags else 0
         
-        # 3. 计算关键词匹配度
-        keyword_match_score = 0.0
+        # 计算关键词匹配度
         question_keywords = set()
         answer_keywords = set()
         
-        for tag in matching_tags:
-            if tag in self.context_keywords:
-                question_keywords.update(self.context_keywords[tag])
-                answer_keywords.update(self.context_keywords[tag])
+        # 从问题和回答中提取关键词
+        for category, keywords in self.context_keywords.items():
+            for keyword in keywords:
+                if keyword in question:
+                    question_keywords.add(category)
+                if keyword in answer:
+                    answer_keywords.add(category)
         
-        if question_keywords and answer_keywords:
-            # 计算加权关键词匹配度
-            question_count = sum(self.importance_weights.get(keyword, 1.0) 
-                               for keyword in question_keywords 
-                               if keyword in question.lower())
-            answer_count = sum(self.importance_weights.get(keyword, 1.0) 
-                             for keyword in answer_keywords 
-                             if keyword in answer.lower())
-            
-            total_keywords = len(question_keywords) + len(answer_keywords)
-            if total_keywords > 0:
-                keyword_match_score = (question_count + answer_count) / total_keywords
+        # 计算关键词匹配度
+        matching_keywords = question_keywords & answer_keywords
+        keyword_match_score = len(matching_keywords) / max(len(question_keywords), len(answer_keywords)) if question_keywords or answer_keywords else 0
         
-        # 4. 计算语义相似度
+        # 计算语义相似度
         semantic_score = self.calculate_semantic_similarity(question, answer)
         
-        # 5. 综合计算最终匹配度
-        final_score = (
-            0.4 * tag_match_score +      # 标签匹配权重
-            0.3 * keyword_match_score +  # 关键词匹配权重
+        # 综合计算匹配分数（加权平均）
+        match_score = (
+            0.4 * tag_match_score +      # 标签匹配度权重
+            0.3 * keyword_match_score +  # 关键词匹配度权重
             0.3 * semantic_score         # 语义相似度权重
         )
         
-        return min(1.0, final_score)
+        return match_score
 
     def is_context_match(self, question: str, answer: str, threshold: float = 0.3) -> bool:
         """判断问题和回答的语境是否匹配"""

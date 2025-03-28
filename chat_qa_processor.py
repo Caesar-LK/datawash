@@ -113,6 +113,7 @@ class ChatQAProcessor:
         current_service = None
         current_question = None
         current_session_id = None
+        current_session_messages = []
         
         total_rows = len(df)
         for idx, row in df.iterrows():
@@ -126,6 +127,12 @@ class ChatQAProcessor:
             
             # 检查是否需要开始新的会话
             if current_session_id is not None and session_id != current_session_id:
+                # 处理当前会话的消息
+                if current_session_messages:
+                    qa_pair = self._merge_session_messages(current_session_messages)
+                    if qa_pair:
+                        qa_pairs.append(qa_pair)
+                current_session_messages = []
                 current_customer = None
                 current_service = None
                 current_question = None
@@ -138,24 +145,117 @@ class ChatQAProcessor:
                 current_customer = message_source
                 current_question = message_content
                 current_service = None
+                if current_question:
+                    current_session_messages.append({
+                        'type': 'question',
+                        'content': current_question,
+                        'time': message_time,
+                        'source': message_source
+                    })
             
             # 处理客服消息
             elif '(' in message_source and ')' in message_source:
                 if current_question is not None:
-                    qa_pair = {
-                        '客户ID': current_customer,
-                        '客服': message_source,
-                        '问题': current_question,
-                        '回答': message_content,
-                        '时间': message_time,
-                        '会话ID': current_session_id,
-                        '标签': self.cleaner.extract_tags(current_question)
-                    }
-                    qa_pairs.append(qa_pair)
-                    current_question = None
+                    current_session_messages.append({
+                        'type': 'answer',
+                        'content': message_content,
+                        'time': message_time,
+                        'source': message_source
+                    })
                 current_service = message_source
         
+        # 处理最后一个会话
+        if current_session_messages:
+            qa_pair = self._merge_session_messages(current_session_messages)
+            if qa_pair:
+                qa_pairs.append(qa_pair)
+        
         return qa_pairs
+    
+    def _merge_session_messages(self, messages: List[Dict]) -> Optional[Dict]:
+        """合并会话消息，提取最有代表性的问答对"""
+        if not messages:
+            return None
+            
+        # 按时间排序
+        messages.sort(key=lambda x: x['time'])
+        
+        # 分离问题和回答
+        questions = [msg for msg in messages if msg['type'] == 'question']
+        answers = [msg for msg in messages if msg['type'] == 'answer']
+        
+        if not questions or not answers:
+            return None
+            
+        # 选择最有代表性的问题
+        representative_question = self._select_representative_question(questions)
+        
+        # 选择最匹配的回答
+        matching_answer = self._find_matching_answer(representative_question, answers)
+        
+        if not representative_question or not matching_answer:
+            return None
+            
+        # 获取会话信息
+        customer_id = next((msg['source'] for msg in messages if msg['type'] == 'question'), None)
+        service_id = next((msg['source'] for msg in messages if msg['type'] == 'answer'), None)
+        
+        return {
+            '客户ID': customer_id,
+            '客服': service_id,
+            '问题': representative_question,
+            '回答': matching_answer,
+            '时间': messages[0]['time'],
+            '会话ID': messages[0].get('session_id'),
+            '标签': self.cleaner.extract_tags(representative_question)
+        }
+    
+    def _select_representative_question(self, questions: List[Dict]) -> str:
+        """选择最有代表性的问题"""
+        if not questions:
+            return ""
+            
+        # 1. 按长度排序，选择较长的完整问题
+        questions.sort(key=lambda x: len(x['content']), reverse=True)
+        
+        # 2. 过滤掉过短的问题
+        valid_questions = [q for q in questions if len(q['content']) > 5]
+        if not valid_questions:
+            return questions[0]['content']
+            
+        # 3. 计算问题之间的相似度
+        best_question = valid_questions[0]['content']
+        max_similarity = 0
+        
+        for q in valid_questions:
+            similarity = sum(self.cleaner.calculate_semantic_similarity(q['content'], other['content'])
+                           for other in valid_questions)
+            if similarity > max_similarity:
+                max_similarity = similarity
+                best_question = q['content']
+        
+        return best_question
+    
+    def _find_matching_answer(self, question: str, answers: List[Dict]) -> str:
+        """找到最匹配的回答"""
+        if not answers:
+            return ""
+            
+        # 1. 计算每个回答与问题的匹配度
+        best_answer = None
+        max_match_score = 0
+        
+        for answer in answers:
+            match_score = self.cleaner.calculate_context_match(question, answer['content'])
+            if match_score > max_match_score:
+                max_match_score = match_score
+                best_answer = answer['content']
+        
+        # 2. 如果匹配度太低，返回空字符串
+        if max_match_score < 0.3:  # 设置匹配度阈值
+            return ""
+            
+        return best_answer
     
     def _save_results(self, qa_df: pd.DataFrame, diagnostic_report: Dict, output_dir: str):
         """保存处理结果"""

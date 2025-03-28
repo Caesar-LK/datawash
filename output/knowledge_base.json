@@ -1,7 +1,17 @@
 [
   {
-    "question": "二手车注销",
-    "answer": "新AD1503",
+    "question": "注销一下这个车ETC",
+    "answer": "请问是什么原因注销呢",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "发起注销",
+    "answer": "请问是什么原因注销呢",
     "tags": [
       "账户问题"
     ],
@@ -9,9 +19,641 @@
     "effective_date": "2025-2027"
   },
   {
-    "question": "二手车注销了给我个码我的工号是A3077",
-    "answer": "使用未满三年注销需支付 198 元的违约金请您扫描以下付款码进行缴费付款时备注车牌号付款后请您提供带有订单编号的付款截图给客服客服为您提交注销申请预计34个工作日完成注销并会有短信告知注销完成进度请您留意.注意一人多车请特别说明",
+    "question": "注销一下",
+    "answer": "请问是什么原因需要注销",
     "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "几天注销好",
+    "answer": "注销需要34个工作日",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销etc",
+    "answer": "请问是什么原因需要注销",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "怎么注销现有的ETC",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "苏C***96黄牌货车查一下什么时候注销完",
+    "answer": "预计最快今天注销完成",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "把我把这2个设备注销",
+    "answer": "请问是什么原因需要注销",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "ETC卡注销.",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "我都查不到绑定的银行卡,无法充值",
+    "answer": "绑定的是6203交通银行",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "34天可以注销吗",
+    "answer": "注销需要34个工作日",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "直接注销不就行了",
+    "answer": "提供相关信息后台才能提交注销",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "怎么免费注销",
+    "answer": "无法免费注销的",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "etc注销",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "解绑银行卡",
+    "answer": "请提供下车牌号姓名及身份证号",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "那这个注销要钱呢,怎么可能出注销费",
+    "answer": "解悠的合约期是3年,所以未使用满三年注销需要支付一定的费用.满3年免费注销",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销ETC",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "那你注销的这个时间段客户就用不了ETC吗",
+    "answer": "是的预计34个工作日注销完成",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "那是不是现在就要支付押金呢",
+    "answer": "是的支付押金后这边办理注销流程",
+    "tags": [
+      "支付问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "支付异常怎么办",
+    "answer": "现在建行正在补扣,您卡里余额充足吗?",
+    "tags": [
+      "支付问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "冀A***35需要注销",
+    "answer": "请问是什么原因需要注销",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "冀B***85 黄牌 申请一下注销",
+    "answer": "请问是什么原因注销呢",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销etc",
+    "answer": "请问是什么原因需要注销",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销ETC",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "没用身份证办",
+    "answer": "办理是需要上传身份证的",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "不用取消绑定就可以吗",
+    "answer": "是的,不用取消",
+    "tags": [
+      "账户问题",
+      "订单问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "上传车辆照片",
+    "answer": "请提供下车辆照片",
+    "tags": [
+      "车辆相关"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "可以提供行驶证和保单",
+    "answer": "请提供保单,绿本,行驶证(三选二)",
+    "tags": [
+      "车辆相关"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "这个客服说已经绑定成功了",
+    "answer": "好的,之前说绑定成功就可以了",
+    "tags": [
+      "服务问题",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "订单取消",
+    "answer": "都需要取消吗?",
+    "tags": [
+      "订单问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "蒙J***91 黄牌货车 注销ETC",
+    "answer": "请问是什么原因注销呢",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "麻烦帮忙提交一下注销",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "支付了要发给你们么",
+    "answer": "您支付完把截图发给客服",
+    "tags": [
+      "支付问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "豫Q***85把我这个车的ETC账号给我注销了",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "收费站说还欠费",
+    "answer": "这涉及到高速收费标准的问题,有时候高速识别的会多识别轴数或者少识别,多收了需要客户反馈给退,少了高速会稽查要补",
+    "tags": [
+      "ETC业务",
+      "支付问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "是不是要从新实名",
+    "answer": "不需要实名需要重新激活下",
+    "tags": [
+      "安全隐私",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "办理ETC",
+    "answer": "您好!解悠ETC,请问有什么可以帮您?",
+    "tags": [
+      "ETC业务"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "要 etc 身份证还是车主身份证",
+    "answer": "请提供扣款人身份证号",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "你这不是没有费用吗?",
+    "answer": "解悠的合约期是3年,所以未使用满三年注销需要支付一定的费用.",
+    "tags": [
+      "支付问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "我想问一下我那个20块钱的过路费,为什么那个服务费要7毛多,这个不是没有服务费吗 8009 为您服务",
+    "answer": "抱歉,解悠的产品都是会收取服务费的",
+    "tags": [
+      "服务问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "意思是一周扣179元卡费和通行费用",
+    "answer": "周卡收费标准:正常每周二还款:通行费卡费(179),无服务费及通道费.",
+    "tags": [
+      "ETC业务",
+      "支付问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "我需要办理注销ETC.",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "你好,我这边要注销皖S****8ETC",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "能不能更改绑定车辆",
+    "answer": "不支持更换车牌号",
+    "tags": [
+      "账户问题",
+      "车辆相关"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "川A***90黄牌货车注销",
+    "answer": "请问是什么原因需要注销",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "川A***67注销ETX",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销这个车",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销ETC",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "取消这个还要验证码啊?",
+    "answer": "取消订单都需要验证码的",
+    "tags": [
+      "安全隐私",
+      "订单问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "在哪里能看到注销的订单详情呢",
+    "answer": "34个工作日注销完成会给办理手机号发送短信的",
+    "tags": [
+      "账户问题",
+      "订单问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "你好,现在货车扣款可以绑定微信的吗",
+    "answer": "不支持绑定微信",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "京A***00黄,注销",
+    "answer": "请问是什么原因注销呢",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销吧",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "云L***80注销",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销ETC",
+    "answer": "请问是什么原因需要注销",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "京E***75蓝牌,这个能注销吗?",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "请问速通卡可以开通网页版吗",
+    "answer": "请问您说的是解悠小程序网页版吗?",
+    "tags": [
+      "系统问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "激活ETC页面显示404了",
+    "answer": "您好!解悠ETC,请问有什么可以帮您?",
+    "tags": [
+      "ETC业务"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "怎么解绑银行卡",
+    "answer": "请您提供车牌号,姓名,身份证号",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "我想注销",
+    "answer": "请问是什么原因需要注销",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "下面的车辆类型是重型半挂牵引车吗",
+    "answer": "回复:下面的车辆类型是重型半挂牵引车吗是的",
+    "tags": [
+      "车辆相关"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "那边说是ETC 问题",
+    "answer": "但通行账单确实是高速下发,您可以直接联系95022反馈一下",
+    "tags": [
+      "投诉建议",
+      "ETC业务"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "亲,为什么登陆中国ETC实名认证,显示用户不匹配",
+    "answer": "回复:亲,为什么登陆中国ETC实名认证,显示用户不匹配说明用的不是办理人的实名微信号",
+    "tags": [
+      "安全隐私",
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "京A***65注销",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "微信直接用解悠小程序不行吗",
+    "answer": "小程序名称:解悠货车服务",
+    "tags": [
+      "系统问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "那就不注销了,等用满再说吧",
+    "answer": "请问需要取消注销吗",
+    "tags": [
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "Etc银行卡怎么解绑",
+    "answer": "您是什么原因要解绑银行卡?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "货车etc解绑",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
+      "账户问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "怎么支付啊",
+    "answer": "今天的账单请您保持银行卡余额充足,21:10,22:10还会划扣",
+    "tags": [
+      "支付问题"
+    ],
+    "source": "客服聊天记录",
+    "effective_date": "2025-2027"
+  },
+  {
+    "question": "注销etc",
+    "answer": "请问您什么原因需要注销ETC呢?",
+    "tags": [
+      "ETC业务",
       "账户问题"
     ],
     "source": "客服聊天记录",
