@@ -112,7 +112,7 @@ class ChatQAProcessor:
         current_customer = None
         current_service = None
         current_question = None
-        last_message_time = None
+        current_session_id = None
         
         total_rows = len(df)
         for idx, row in df.iterrows():
@@ -122,13 +122,16 @@ class ChatQAProcessor:
             message_source = str(row['消息来源']).strip()
             message_content = str(row['聊天内容']).strip()
             message_time = row['消息时间']
+            session_id = str(row['会话ID']).strip() if '会话ID' in row else None
             
             # 检查是否需要开始新的会话
-            if last_message_time is not None:
-                if self.cleaner.is_new_session(message_time, last_message_time):
-                    current_customer = None
-                    current_service = None
-                    current_question = None
+            if current_session_id is not None and session_id != current_session_id:
+                current_customer = None
+                current_service = None
+                current_question = None
+            
+            # 更新当前会话ID
+            current_session_id = session_id
             
             # 处理客户消息
             if message_source.startswith('mImjj'):
@@ -145,13 +148,12 @@ class ChatQAProcessor:
                         '问题': current_question,
                         '回答': message_content,
                         '时间': message_time,
+                        '会话ID': current_session_id,
                         '标签': self.cleaner.extract_tags(current_question)
                     }
                     qa_pairs.append(qa_pair)
                     current_question = None
                 current_service = message_source
-            
-            last_message_time = message_time
         
         return qa_pairs
     
