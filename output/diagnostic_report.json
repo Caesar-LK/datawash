@@ -1,39 +1,39 @@
 {
   "basic_stats": {
-    "total_records": 13342,
+    "total_records": 24178,
     "missing_rates": {
       "会话ID": 0.0,
       "结束一级类别": 0.0,
-      "结束二级类别": 0.01071803327836906,
-      "结束三级类别": 0.01071803327836906,
+      "结束二级类别": 0.014641409545868145,
+      "结束三级类别": 0.014641409545868145,
       "消息来源": 0.0,
       "消息时间": 0.0,
       "聊天内容": 0.0
     },
     "duplicate_rate": 0.0,
     "emoji_frequency": {
-      "请稍等，正在为您查询": 786,
-      "好的": 499,
-      "设备拔下来禁止再次使用": 299,
-      "上高速，避免产生账单影响注销进度。": 292,
-      "解悠货车服务": 227,
-      "首页": 216,
-      "你好": 212,
-      "个工作日注销完成，届时会有短信通知发送至您的办理手机号，现在需要您将": 204,
-      "晋": 192,
-      "使用未满三年，注销需支付（": 173
+      "请稍等，正在为您查询": 971,
+      "好的": 842,
+      "设备拔下来禁止再次使用": 451,
+      "上高速，避免产生账单影响注销进度。": 442,
+      "请您提供一下车牌号、姓名及身份证号": 428,
+      "你好": 415,
+      "请稍等": 394,
+      "解悠货车服务": 388,
+      "冀": 339,
+      "川": 299
     },
     "language_mix": {
-      "chinese_ratio": 0.7856489528930561,
-      "english_ratio": 0.034456133960000475,
-      "mixed_ratio": 0.8201050868530566
+      "chinese_ratio": 0.7812802905159115,
+      "english_ratio": 0.03487192089084265,
+      "mixed_ratio": 0.8161522114067541
     },
     "message_length_stats": {
-      "mean_length": 18.929171038824762,
+      "mean_length": 18.177434030937217,
       "median_length": 9.0,
-      "max_length": 406.0,
+      "max_length": 368.0,
       "min_length": 1.0,
-      "std_length": 31.28934589723054
+      "std_length": 29.891555667437547
     }
   },
   "response_time": {
@@ -44,15 +44,15 @@
     "response_time_std": 0
   },
   "session_patterns": {
-    "total_sessions": 2,
-    "mean_session_length": 6671.0,
-    "max_session_length": 6688,
-    "min_session_length": 6654,
-    "session_length_std": 17.0
+    "total_sessions": 4,
+    "mean_session_length": 6044.5,
+    "max_session_length": 7266,
+    "min_session_length": 5022,
+    "session_length_std": 814.5810272772133
   },
   "quality_metrics": {
-    "completeness": 0.9969377047776088,
-    "consistency": 0.26379103582671265,
-    "validity": 0.9297331734372658
+    "completeness": 0.995816740129752,
+    "consistency": 0.26151873604102904,
+    "validity": 0.9315079824633965
   }
 }

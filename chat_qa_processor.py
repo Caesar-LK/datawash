@@ -311,7 +311,7 @@ class ChatQAProcessor:
         print(f"\n总共处理了 {len(qa_df)} 个问答对")
 
 if __name__ == "__main__":
-    excel_path = 'data.xlsx'  # 修改为当前目录下的data.xlsx
+    excel_path = '2025-04-01_03-02-44_0_数据已预处理.xlsx'  # 修改为当前目录下的data.xlsx
     
     try:
         processor = ChatQAProcessor()

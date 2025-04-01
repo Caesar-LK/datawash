@@ -494,3 +494,56 @@ class DataCleaner:
         """判断问题和回答的语境是否匹配"""
         match_score = self.calculate_context_match(question, answer)
         return match_score >= threshold 
+
+    def _find_matching_answer(self, question: str, answers: List[str]) -> Optional[str]:
+        """查找最匹配的回答"""
+        if not answers:
+            return None
+            
+        # 过滤掉疑问句和非陈述句
+        filtered_answers = []
+        for answer in answers:
+            # 检查是否是疑问句
+            if any(answer.endswith(q) for q in ['吗？', '呢？', '？', '?']):
+                continue
+                
+            # 检查是否需要客户提供信息
+            if any(keyword in answer for keyword in [
+                '请提供', '请您提供', '请您发', '请您上传', '请您提交', '请您填写', '请您补充',
+                '请发', '请上传', '请提交', '请填写', '请补充',
+                '发一下', '上传', '提交', '填写', '补充',
+                '麻烦提供', '麻烦您提供', '麻烦发', '麻烦您发',
+                '能否提供', '能否请您提供', '能否发', '能否请您发',
+                '可以提供', '可以请您提供', '可以发', '可以请您发',
+                '需要提供', '需要您提供', '需要发', '需要您发',
+                '请您把', '请您将', '请您发送', '请您分享',
+                '请把', '请将', '请发送', '请分享',
+                '麻烦把', '麻烦您把', '麻烦将', '麻烦您将',
+                '能否把', '能否请您把', '能否将', '能否请您将',
+                '可以把', '可以请您把', '可以将', '可以请您将',
+                '需要把', '需要您把', '需要将', '需要您将'
+            ]):
+                continue
+                
+            # 检查是否是非陈述句
+            if answer.startswith(('请问', '能否', '可以', '是否', '是不是', '有没有')):
+                continue
+                
+            filtered_answers.append(answer)
+            
+        if not filtered_answers:
+            return None
+            
+        # 计算匹配度
+        best_match = None
+        best_score = 0
+        
+        for answer in filtered_answers:
+            # 计算问题和回答的匹配度
+            match_score = self.calculate_context_match(question, answer)
+            
+            if match_score > best_score:
+                best_score = match_score
+                best_match = answer
+                
+        return best_match if best_score >= 0.3 else None 
