@@ -241,21 +241,18 @@ class ChatQAProcessor:
         if not answers:
             return ""
             
-        # 1. 计算每个回答与问题的匹配度
-        best_answer = None
-        max_match_score = 0
+        # 提取所有回答的内容
+        answer_contents = [answer['content'] for answer in answers]
         
-        for answer in answers:
-            match_score = self.cleaner.calculate_context_match(question, answer['content'])
-            if match_score > max_match_score:
-                max_match_score = match_score
-                best_answer = answer['content']
+        # 使用data_cleaner中的_find_matching_answer方法找到最匹配的回答
+        matching_answer = self.cleaner._find_matching_answer(question, answer_contents)
         
-        # 2. 如果匹配度太低，返回空字符串
-        if max_match_score < 0.3:  # 设置匹配度阈值
+        # 如果没有找到匹配的回答，返回空字符串
+        if not matching_answer:
             return ""
             
-        return best_answer
+        # 返回匹配的回答内容
+        return matching_answer
     
     def _save_results(self, qa_df: pd.DataFrame, diagnostic_report: Dict, output_dir: str):
         """保存处理结果"""
